@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation — AetherArch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/logo-aetherarch.jpg" type="image/jpeg" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <img src="assets/logo-aetherarch.jpg" alt="AetherArch" class="logo-img" />
+        <span>AetherArch</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#get-started" class="btn-nav">Get Started</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Documentation</h1>
+    <p style="color: var(--text-muted);">Concept documentation for AetherArch</p>
+  </div>
+
+  <div class="docs-content">
+    <h2>1. Introduction</h2>
+    <p>
+      AetherArch is a conceptual evolution of Arch Linux. It keeps the rolling-release model, the KISS philosophy, and the power-user focus, while adding deeper modularity, a hybrid package system, and a coherent modern aesthetic.
+    </p>
+
+    <h2>2. Core Principles</h2>
+    <ul>
+      <li><strong>Simplicity first</strong> — but not at the cost of capability</li>
+      <li><strong>User is in full control</strong></li>
+      <li><strong>Modularity by design</strong></li>
+      <li><strong>Bleeding edge with optional stability layers</strong></li>
+      <li><strong>Aesthetic coherence</strong> as a productivity feature</li>
+    </ul>
+
+    <h2>3. Package Management</h2>
+    <p>The main tool is <code>aether-pkg</code>, fully compatible with pacman syntax while adding:</p>
+    <ul>
+      <li>Native container packages</li>
+      <li>Source builds with dependency tracking</li>
+      <li>Transactional updates (optional)</li>
+      <li>Better AUR integration</li>
+    </ul>
+
+    <pre>aether-pkg -Syu
+aether-pkg -S neovim-aether
+aether-pkg search zfs
+aether-pkg container run alpine</pre>
+
+    <h2>4. Window Manager — AetherWM</h2>
+    <p>
+      AetherWM is a dynamic tiling window manager with floating support, inspired by the best of i3, Hyprland and bspwm, but with predictive focus and layout memory.
+    </p>
+
+    <h2>5. Kernel</h2>
+    <p>
+      <code>linux-aether</code> is a custom kernel based on mainline with selected performance and modularity patches. Modules can be loaded/unloaded more aggressively at runtime.
+    </p>
+
+    <h2>6. Installation (Conceptual)</h2>
+    <p>In a real version, the process would be very close to Arch:</p>
+    <ol>
+      <li>Boot the ISO</li>
+      <li>Partition & mount</li>
+      <li>Run <code>aetherstrap</code> (improved pacstrap)</li>
+      <li>Configure & reboot</li>
+    </ol>
+
+    <h2>7. Status</h2>
+    <p>
+      This entire project is currently a <strong>design and architecture concept</strong>. There is no real ISO, no real packages, and no real repository. It exists as a visual and philosophical exploration of what a more ambitious Arch-based system could look like.
+    </p>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="assets/logo-aetherarch.jpg" alt="" width="28" />
+          <span>AetherArch</span>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="docs.html">Documentation</a>
+          <a href="roadmap.html">Roadmap</a>
+          <a href="about.html">About</a>
+        </div>
+        <p class="copyright">Concept project • 2026</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

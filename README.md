@@ -1,29 +1,45 @@
-# AetherArch
+# AetherArch — Concept Kit
 
-**Official concept website** for AetherArch — a fictional advanced Linux distribution inspired by Arch Linux.
+Complete conceptual design kit for **AetherArch**, a fictional next-generation Linux distribution inspired by Arch Linux.
 
-## Live Preview
+## What's included
 
-You can host this website for free on **GitHub Pages** in less than 2 minutes.
+- Full multi-page website (Home, Docs, Roadmap, About)
+- Official logo and visual assets
+- UI mockups (Login, Terminal, Package Manager, Desktop)
+- Technical overview & philosophy
+- Ready for GitHub Pages
 
-### How to put it on GitHub Pages
+## Structure
 
-1. Create a new repository on GitHub (example name: `aetherarch` or `aetherarch.github.io`)
-2. Upload all the files from this folder (`index.html`, `style.css`, `script.js`, `README.md`)
+```
+aetherarch/
+├── index.html          # Main landing page
+├── docs.html           # Documentation
+├── roadmap.html        # Development roadmap (concept)
+├── about.html          # About the project
+├── style.css           # Full dark + cyan theme
+├── script.js           # Light interactions
+├── assets/
+│   ├── logo-aetherarch.jpg
+│   ├── login-screen.jpg
+│   ├── terminal.jpg
+│   ├── package-manager.jpg
+│   └── desktop-or-extra.jpg
+└── README.md
+```
+
+## Deploy on GitHub Pages
+
+1. Create a new repository on GitHub
+2. Upload all files and the `assets` folder
 3. Go to **Settings → Pages**
-4. Under **Source**, select the branch `main` (or `master`) and folder `/ (root)`
-5. Click Save
+4. Source: Deploy from branch `main` / root
+5. Your site will be live at `https://USERNAME.github.io/REPO_NAME/`
 
-Your site will be available at:
-`https://YOUR_USERNAME.github.io/aetherarch/`
+## Status
 
-(or `https://YOUR_USERNAME.github.io` if you named the repo `username.github.io`)
+This is a **design & architecture concept** only.  
+No real bootable operating system exists.
 
----
-
-## Project Status
-
-This is a **design & concept project** only.  
-There is currently no real bootable ISO or operating system.
-
-Created as a visual and architectural concept.
+Created as an ambitious visual and technical exploration.

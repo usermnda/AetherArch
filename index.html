@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AetherArch — The Next Evolution of Arch</title>
+  <meta name="description" content="AetherArch is a highly modular, extreme rolling-release Linux distribution inspired by Arch Linux, pushed far beyond." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <svg class="logo-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff"/>
+              <stop offset="100%" stop-color="#0088ff"/>
+            </linearGradient>
+          </defs>
+          <!-- Outer triangle -->
+          <path d="M50 5 L95 115 L5 115 Z" fill="none" stroke="url(#cyanGrad)" stroke-width="1.5" opacity="0.4"/>
+          <!-- Mid triangle -->
+          <path d="M50 20 L82 100 L18 100 Z" fill="none" stroke="url(#cyanGrad)" stroke-width="1.8" opacity="0.7"/>
+          <!-- Inner glowing triangle -->
+          <path d="M50 35 L70 85 L30 85 Z" fill="none" stroke="#00f0ff" stroke-width="2.5"/>
+          <!-- Circuit lines -->
+          <path d="M50 45 L50 75 M40 60 L60 60" stroke="#00f0ff" stroke-width="1.2" opacity="0.9"/>
+          <circle cx="50" cy="55" r="2.5" fill="#00f0ff"/>
+        </svg>
+        <span>AetherArch</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#get-started" class="btn-nav">Get Started</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-logo">
+        <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff"/>
+              <stop offset="50%" stop-color="#00aaff"/>
+              <stop offset="100%" stop-color="#0066ff"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Multiple layered triangles -->
+          <path d="M100 10 L190 220 L10 220 Z" fill="none" stroke="url(#mainGrad)" stroke-width="1.2" opacity="0.25"/>
+          <path d="M100 30 L170 200 L30 200 Z" fill="none" stroke="url(#mainGrad)" stroke-width="1.5" opacity="0.4"/>
+          <path d="M100 50 L150 180 L50 180 Z" fill="none" stroke="url(#mainGrad)" stroke-width="2" opacity="0.6"/>
+          <path d="M100 70 L135 160 L65 160 Z" fill="none" stroke="#00f0ff" stroke-width="2.8" filter="url(#glow)"/>
+          <!-- Inner circuit -->
+          <path d="M100 90 L100 140 M85 115 L115 115" stroke="#00f0ff" stroke-width="1.8" opacity="0.95"/>
+          <circle cx="100" cy="110" r="4" fill="#00f0ff"/>
+          <path d="M100 90 L85 115 L115 115 Z" fill="none" stroke="#00f0ff" stroke-width="1" opacity="0.6"/>
+        </svg>
+      </div>
+      <h1>AetherArch</h1>
+      <p class="tagline">Arch Linux, pushed to its absolute limit.</p>
+      <p class="subtitle">
+        Extreme modularity • Hybrid package management • Native containers • Intelligent tiling • Zero compromise
+      </p>
+      <div class="hero-buttons">
+        <a href="#get-started" class="btn btn-primary">Download ISO</a>
+        <a href="#features" class="btn btn-secondary">Explore Features</a>
+      </div>
+    </div>
+    <div class="hero-bg"></div>
+  </header>
+
+  <!-- Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2 class="section-title">Core Features</h2>
+      <p class="section-subtitle">Everything you love about Arch, amplified.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Hybrid Package Manager</h3>
+          <p>pacman + source builds + native container packages in a single unified interface. Install from AUR, compile from source, or run isolated containers without leaving the terminal.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>Intelligent Tiling</h3>
+          <p>Next-generation window manager with adaptive layouts, predictive focus, and deep keyboard-driven workflows. Built for power users who never touch the mouse.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧬</div>
+          <h3>Dynamic Kernel Modules</h3>
+          <p>Kernel with hot-swappable modules and runtime configuration. Load only what you need, when you need it. Extreme performance tuning made simple.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3>Native Container Runtime</h3>
+          <p>First-class support for rootless containers integrated at the system level. Run services, apps, or entire environments without Docker bloat.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌑</div>
+          <h3>Deep Dark Aesthetic</h3>
+          <p>Every component designed around a coherent dark + cyan neon visual language. Consistent, beautiful, and distraction-free.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Extreme Modularity</h3>
+          <p>Almost nothing is forced. Build your system from a minimal base and add only what you actually use. True DIY philosophy taken further.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section id="philosophy" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Philosophy</h2>
+      <div class="philosophy-content">
+        <blockquote>
+          “Keep it simple, but never stop evolving.”
+        </blockquote>
+        <p>
+          AetherArch is not a beginner distribution. It is built for those who already understand Linux deeply and want more control, more performance, and more beauty.
+        </p>
+        <p>
+          We take the Arch principles — simplicity, modernity, pragmatism, user-centrism — and push them into new territory: deeper modularity, smarter defaults for power users, and a visual identity that matches the technical ambition.
+        </p>
+        <div class="philosophy-points">
+          <div class="point">
+            <strong>Rolling Extreme</strong>
+            <span>Always on the bleeding edge, with carefully tested stability layers.</span>
+          </div>
+          <div class="point">
+            <strong>User in Control</strong>
+            <span>You decide the shape of your system. We just give you sharper tools.</span>
+          </div>
+          <div class="point">
+            <strong>Aesthetic as Function</strong>
+            <span>A coherent visual language reduces cognitive load and increases focus.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section id="screenshots" class="section">
+    <div class="container">
+      <h2 class="section-title">Interface Preview</h2>
+      <p class="section-subtitle">Dark. Dense. Precise.</p>
+
+      <div class="screenshots-grid">
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder login">
+            <div class="fake-login">
+              <div class="fake-logo"></div>
+              <div class="fake-field"></div>
+              <div class="fake-field"></div>
+              <div class="fake-btn"></div>
+            </div>
+          </div>
+          <p>Login Screen</p>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder desktop">
+            <div class="fake-bar"></div>
+            <div class="fake-windows">
+              <div class="fake-win"></div>
+              <div class="fake-win"></div>
+              <div class="fake-win small"></div>
+            </div>
+          </div>
+          <p>Desktop Environment</p>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder terminal">
+            <div class="fake-term">
+              <span class="prompt">λ</span> aetherctl status<br>
+              <span class="output">→ kernel: 6.12.4-aether</span><br>
+              <span class="output">→ packages: 847</span><br>
+              <span class="output">→ uptime: 14d 7h</span>
+            </div>
+          </div>
+          <p>Terminal & Tools</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get Started -->
+  <section id="get-started" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Get Started</h2>
+      <p class="section-subtitle">AetherArch is currently in active development (concept stage).</p>
+
+      <div class="cta-box">
+        <h3>Want to follow the project?</h3>
+        <p>This is a design & architecture concept. A real bootable ISO does not exist yet.</p>
+        <div class="cta-buttons">
+          <a href="https://github.com" class="btn btn-primary" target="_blank">View on GitHub</a>
+          <a href="#" class="btn btn-secondary">Join the Discussion</a>
+        </div>
+        <p class="note">You can host this exact website on GitHub Pages in under 2 minutes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 5 L55 65 L5 65 Z" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M30 20 L45 55 L15 55 Z" fill="none" stroke="#00f0ff" stroke-width="1.5" opacity="0.6"/>
+          </svg>
+          <span>AetherArch</span>
+        </div>
+        <p>Inspired by Arch Linux. Designed for those who want more.</p>
+        <p class="copyright">Concept project • Not an official Arch Linux derivative</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

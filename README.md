@@ -1,45 +1,23 @@
-# AetherArch — Concept Kit
+# AetherArch — AI Hosting OS (Beta)
 
-Complete conceptual design kit for **AetherArch**, a fictional next-generation Linux distribution inspired by Arch Linux.
+Système d'exploitation conceptuel conçu pour **héberger une IA**.
 
-## What's included
+## Lancer
 
-- Full multi-page website (Home, Docs, Roadmap, About)
-- Official logo and visual assets
-- UI mockups (Login, Terminal, Package Manager, Desktop)
-- Technical overview & philosophy
-- Ready for GitHub Pages
+Ouvre simplement `index.html` dans un navigateur.
 
-## Structure
+Tu arrives **directement dans le bureau** (plus de page d'accueil).
 
-```
-aetherarch/
-├── index.html          # Main landing page
-├── docs.html           # Documentation
-├── roadmap.html        # Development roadmap (concept)
-├── about.html          # About the project
-├── style.css           # Full dark + cyan theme
-├── script.js           # Light interactions
-├── assets/
-│   ├── logo-aetherarch.jpg
-│   ├── login-screen.jpg
-│   ├── terminal.jpg
-│   ├── package-manager.jpg
-│   └── desktop-or-extra.jpg
-└── README.md
-```
+## Contenu
 
-## Deploy on GitHub Pages
+- Bureau AetherArch (Beta)
+- Terminal fonctionnel (`help`, `neofetch`, `aether-ai status`...)
+- Fenêtre **AI Core** (runtime neural)
+- Gestionnaire de paquets
+- Infos système
 
-1. Create a new repository on GitHub
-2. Upload all files and the `assets` folder
-3. Go to **Settings → Pages**
-4. Source: Deploy from branch `main` / root
-5. Your site will be live at `https://USERNAME.github.io/REPO_NAME/`
+## But
 
-## Status
+OS pensé pour faire tourner et héberger des modèles d'IA localement.
 
-This is a **design & architecture concept** only.  
-No real bootable operating system exists.
-
-Created as an ambitious visual and technical exploration.
+C'est une bêta / concept — pas un vrai système bootable.

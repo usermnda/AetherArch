@@ -3,234 +3,947 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AetherArch — The Next Evolution of Arch</title>
-  <meta name="description" content="AetherArch is a highly modular, extreme rolling-release Linux distribution inspired by Arch Linux, pushed far beyond." />
+  <title>AetherArch — AI Hosting OS (Beta)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="icon" href="assets/logo-aetherarch.jpg" type="image/jpeg" />
+  <style>
+    :root {
+      --bg: #05050a;
+      --surface: #0c0c14;
+      --border: #1c1c2e;
+      --cyan: #00f0ff;
+      --text: #d0d0e8;
+      --muted: #6a6a8a;
+      --ai: #a855f7;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #000;
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #desktop {
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse 80% 40% at 50% -10%, rgba(0, 200, 255, 0.09), transparent),
+        radial-gradient(ellipse 50% 30% at 80% 70%, rgba(168, 85, 247, 0.06), transparent),
+        linear-gradient(180deg, #05050a 0%, #080812 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 36px;
+      background: rgba(8, 8, 16, 0.92);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .topbar-left, .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar .logo-mini {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+    }
+
+    .topbar .time {
+      font-variant-numeric: tabular-nums;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .topbar .status {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .ai-status {
+      color: var(--ai);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ai-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--ai);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--ai);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .icons {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-content: flex-start;
+    }
+
+    .icon {
+      width: 84px;
+      text-align: center;
+      cursor: pointer;
+      padding: 8px 4px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+
+    .icon:hover {
+      background: rgba(0, 240, 255, 0.08);
+    }
+
+    .icon-img {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--cyan);
+    }
+
+    .icon-img.ai {
+      color: var(--ai);
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .icon span {
+      font-size: 12px;
+      color: var(--text);
+      text-shadow: 0 1px 3px #000;
+    }
+
+    .window {
+      position: absolute;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,240,255,0.08);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 400px;
+      min-height: 260px;
+      z-index: 50;
+    }
+
+    .window.open { display: flex; }
+    .window.active {
+      z-index: 60;
+      border-color: rgba(0, 240, 255, 0.35);
+    }
+
+    .titlebar {
+      height: 36px;
+      background: #0a0a14;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      cursor: move;
+    }
+
+    .titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .titlebar-left img {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+    }
+
+    .window-controls { display: flex; gap: 8px; }
+
+    .win-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .win-btn.close { background: #ff5f57; }
+    .win-btn.minimize { background: #febc2e; }
+    .win-btn.maximize { background: #28c840; }
+
+    .window-content {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    #term-window {
+      width: 700px;
+      height: 440px;
+      top: 70px;
+      left: 100px;
+    }
+
+    .terminal {
+      height: 100%;
+      background: #06060e;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #b0e0ff;
+      overflow-y: auto;
+    }
+
+    .terminal .prompt { color: var(--cyan); }
+    .terminal .output { color: #88ccaa; white-space: pre-wrap; }
+    .terminal .ai-out { color: #c4b5fd; white-space: pre-wrap; }
+    .terminal .error { color: #ff6b6b; }
+
+    .terminal input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #e0f7ff;
+      font-family: inherit;
+      font-size: inherit;
+      width: calc(100% - 110px);
+    }
+
+    #ai-window {
+      width: 560px;
+      height: 420px;
+      top: 90px;
+      left: 280px;
+    }
+
+    .ai-panel {
+      padding: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ai-header img {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+    }
+
+    .ai-header h3 {
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, #a855f7, #00f0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ai-header span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .ai-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .ai-stat {
+      background: #080810;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .ai-stat .label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ai-stat .value {
+      font-size: 1.15rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .ai-stat .value.purple { color: var(--ai); }
+
+    .ai-log {
+      flex: 1;
+      background: #06060e;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      overflow-y: auto;
+      color: #a0a0c0;
+    }
+
+    .ai-log .line { margin-bottom: 4px; }
+    .ai-log .ok { color: #4ade80; }
+    .ai-log .info { color: #60a5fa; }
+    .ai-log .ai { color: #c4b5fd; }
+
+    #pkg-window {
+      width: 700px;
+      height: 460px;
+      top: 55px;
+      left: 180px;
+    }
+
+    .pkg-ui { display: flex; height: 100%; }
+
+    .pkg-sidebar {
+      width: 170px;
+      background: #080810;
+      border-right: 1px solid var(--border);
+      padding: 12px 0;
+    }
+
+    .pkg-sidebar-item {
+      padding: 9px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .pkg-sidebar-item.active, .pkg-sidebar-item:hover {
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--cyan);
+    }
+
+    .pkg-main {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .pkg-search {
+      width: 100%;
+      background: #0a0a14;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-size: 13px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .pkg-search:focus { border-color: var(--cyan); }
+
+    .pkg-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .pkg-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: #0a0a12;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .pkg-item .name { color: var(--cyan); font-weight: 500; }
+    .pkg-item .desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+    .pkg-item button {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .pkg-item button:hover {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    #sys-window {
+      width: 460px;
+      height: 360px;
+      top: 130px;
+      left: 340px;
+    }
+
+    .sys-content {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .sys-content img {
+      width: 72px;
+      margin: 0 auto 14px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .sys-content h2 {
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sys-content .version {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .sys-info {
+      text-align: left;
+      background: #080810;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .sys-info span { color: var(--cyan); }
+
+    .taskbar {
+      height: 44px;
+      background: rgba(6, 6, 14, 0.95);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 6px;
+      backdrop-filter: blur(12px);
+    }
+
+    .task-btn {
+      height: 32px;
+      padding: 0 12px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .task-btn:hover, .task-btn.active {
+      background: rgba(0, 240, 255, 0.1);
+      border-color: rgba(0, 240, 255, 0.25);
+    }
+
+    .task-btn img {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+    }
+
+    .toast {
+      position: absolute;
+      bottom: 60px;
+      right: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      max-width: 340px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 200;
+      animation: slideIn 0.4s ease;
+    }
+
+    .toast h4 {
+      color: var(--cyan);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .toast p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo-aetherarch.jpg" alt="AetherArch" class="logo-img" />
-        <span>AetherArch</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#philosophy">Philosophy</a></li>
-        <li><a href="#screenshots">Screenshots</a></li>
-        <li><a href="docs.html">Docs</a></li>
-        <li><a href="roadmap.html">Roadmap</a></li>
-        <li><a href="#get-started" class="btn-nav">Get Started</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <header class="hero">
-    <div class="hero-content">
-      <div class="hero-logo">
-        <img src="assets/logo-aetherarch.jpg" alt="AetherArch Logo" />
+  <div id="desktop">
+    <div class="topbar">
+      <div class="topbar-left">
+        <img src="assets/logo-aetherarch.jpg" class="logo-mini" alt="" />
+        <span style="font-weight: 600; letter-spacing: -0.02em;">AetherArch</span>
+        <span class="status">Beta 0.9.4 • AI Host</span>
       </div>
-      <h1>AetherArch</h1>
-      <p class="tagline">Arch Linux, pushed to its absolute limit.</p>
-      <p class="subtitle">
-        Extreme modularity • Hybrid package management • Native containers • Intelligent tiling • Zero compromise
-      </p>
-      <div class="hero-buttons">
-        <a href="#get-started" class="btn btn-primary">Download ISO</a>
-        <a href="docs.html" class="btn btn-secondary">Documentation</a>
+      <div class="topbar-right">
+        <div class="ai-status">
+          <div class="ai-dot"></div>
+          AI Core: Online
+        </div>
+        <span class="status">aether-pkg</span>
+        <span class="time" id="clock">00:00:00</span>
       </div>
     </div>
-    <div class="hero-bg"></div>
-  </header>
 
-  <!-- Features -->
-  <section id="features" class="section">
-    <div class="container">
-      <h2 class="section-title">Core Features</h2>
-      <p class="section-subtitle">Everything you love about Arch, amplified.</p>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Hybrid Package Manager</h3>
-          <p>pacman + source builds + native container packages in a single unified interface. Install from AUR, compile from source, or run isolated containers without leaving the terminal.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧠</div>
-          <h3>Intelligent Tiling (AetherWM)</h3>
-          <p>Next-generation window manager with adaptive layouts, predictive focus, and deep keyboard-driven workflows. Built for power users who never touch the mouse.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧬</div>
-          <h3>Dynamic Kernel Modules</h3>
-          <p>Kernel with hot-swappable modules and runtime configuration. Load only what you need, when you need it. Extreme performance tuning made simple.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <h3>Native Container Runtime</h3>
-          <p>First-class support for rootless containers integrated at the system level. Run services, apps, or entire environments without Docker bloat.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌑</div>
-          <h3>Deep Dark Aesthetic</h3>
-          <p>Every component designed around a coherent dark + cyan neon visual language. Consistent, beautiful, and distraction-free.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔧</div>
-          <h3>Extreme Modularity</h3>
-          <p>Almost nothing is forced. Build your system from a minimal base and add only what you actually use. True DIY philosophy taken further.</p>
-        </div>
+    <div class="icons">
+      <div class="icon" onclick="openWindow('term')">
+        <div class="icon-img">⌘</div>
+        <span>Terminal</span>
+      </div>
+      <div class="icon" onclick="openWindow('ai')">
+        <div class="icon-img ai">◈</div>
+        <span>AI Core</span>
+      </div>
+      <div class="icon" onclick="openWindow('pkg')">
+        <div class="icon-img">📦</div>
+        <span>Packages</span>
+      </div>
+      <div class="icon" onclick="openWindow('sys')">
+        <div class="icon-img">ℹ</div>
+        <span>System</span>
+      </div>
+      <div class="icon" onclick="openWindow('term'); setTimeout(() => runCommand('aether-ai status'), 100)">
+        <div class="icon-img ai">λ</div>
+        <span>AI Status</span>
       </div>
     </div>
-  </section>
 
-  <!-- Philosophy -->
-  <section id="philosophy" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Philosophy</h2>
-      <div class="philosophy-content">
-        <blockquote>
-          “Keep it simple, but never stop evolving.”
-        </blockquote>
-        <p>
-          AetherArch is not a beginner distribution. It is built for those who already understand Linux deeply and want more control, more performance, and more beauty.
-        </p>
-        <p>
-          We take the Arch principles — simplicity, modernity, pragmatism, user-centrism — and push them into new territory: deeper modularity, smarter defaults for power users, and a visual identity that matches the technical ambition.
-        </p>
-        <div class="philosophy-points">
-          <div class="point">
-            <strong>Rolling Extreme</strong>
-            <span>Always on the bleeding edge, with carefully tested stability layers.</span>
-          </div>
-          <div class="point">
-            <strong>User in Control</strong>
-            <span>You decide the shape of your system. We just give you sharper tools.</span>
-          </div>
-          <div class="point">
-            <strong>Aesthetic as Function</strong>
-            <span>A coherent visual language reduces cognitive load and increases focus.</span>
+    <div class="window" id="term-window">
+      <div class="titlebar" onmousedown="startDrag(event, 'term-window')">
+        <div class="titlebar-left">
+          <img src="assets/logo-aetherarch.jpg" alt="" />
+          <span>AetherArch Terminal</span>
+        </div>
+        <div class="window-controls">
+          <button class="win-btn minimize" onclick="minimizeWindow('term')"></button>
+          <button class="win-btn maximize"></button>
+          <button class="win-btn close" onclick="closeWindow('term')"></button>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="terminal" id="terminal" onclick="document.getElementById('cmd').focus()">
+          <div class="output">AetherArch Beta 0.9.4 — AI Hosting OS
+Type 'help' for commands. AI Core is online.
+</div>
+          <div>
+            <span class="prompt">arch@aetherarch:~$ </span>
+            <input type="text" id="cmd" autocomplete="off" spellcheck="false" />
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Screenshots -->
-  <section id="screenshots" class="section">
-    <div class="container">
-      <h2 class="section-title">Interface Preview</h2>
-      <p class="section-subtitle">Dark. Dense. Precise.</p>
-
-      <div class="screenshots-grid real">
-        <div class="screenshot-card">
-          <img src="assets/login-screen.jpg" alt="Login Screen" loading="lazy" />
-          <p>Login Screen</p>
+    <div class="window" id="ai-window">
+      <div class="titlebar" onmousedown="startDrag(event, 'ai-window')">
+        <div class="titlebar-left">
+          <img src="assets/logo-aetherarch.jpg" alt="" />
+          <span>AI Core — Neural Host</span>
         </div>
-        <div class="screenshot-card">
-          <img src="assets/terminal.jpg" alt="Terminal" loading="lazy" />
-          <p>AetherArch Terminal + neofetch</p>
+        <div class="window-controls">
+          <button class="win-btn minimize" onclick="minimizeWindow('ai')"></button>
+          <button class="win-btn maximize"></button>
+          <button class="win-btn close" onclick="closeWindow('ai')"></button>
         </div>
-        <div class="screenshot-card">
-          <img src="assets/package-manager.jpg" alt="Package Manager" loading="lazy" />
-          <p>Hybrid Package Manager</p>
-        </div>
-        <div class="screenshot-card">
-          <img src="assets/desktop-or-extra.jpg" alt="Desktop" loading="lazy" />
-          <p>Desktop / Extra view</p>
+      </div>
+      <div class="window-content">
+        <div class="ai-panel">
+          <div class="ai-header">
+            <img src="assets/logo-aetherarch.jpg" alt="" />
+            <div>
+              <h3>Aether Neural Runtime</h3>
+              <span>Status: Online • Ready for models</span>
+            </div>
+          </div>
+          <div class="ai-stats">
+            <div class="ai-stat">
+              <div class="label">GPU Memory</div>
+              <div class="value">6.2 / 24 GB</div>
+            </div>
+            <div class="ai-stat">
+              <div class="label">Active Models</div>
+              <div class="value purple">1</div>
+            </div>
+            <div class="ai-stat">
+              <div class="label">Inference</div>
+              <div class="value">42 tok/s</div>
+            </div>
+            <div class="ai-stat">
+              <div class="label">Uptime</div>
+              <div class="value" id="ai-uptime">0m</div>
+            </div>
+          </div>
+          <div class="ai-log" id="ai-log">
+            <div class="line info">[system] Neural runtime initialized</div>
+            <div class="line ok">[system] CUDA backend ready</div>
+            <div class="line ai">[aether-ai] Default model loaded: aether-7b-instruct</div>
+            <div class="line info">[system] Waiting for requests...</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- System Specs -->
-  <section class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Technical Overview</h2>
-      <div class="specs-grid">
-        <div class="spec-item">
-          <span class="spec-label">Base</span>
-          <span class="spec-value">Arch Linux (rolling)</span>
+    <div class="window" id="pkg-window">
+      <div class="titlebar" onmousedown="startDrag(event, 'pkg-window')">
+        <div class="titlebar-left">
+          <img src="assets/logo-aetherarch.jpg" alt="" />
+          <span>AetherArch Package Manager</span>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Init</span>
-          <span class="spec-value">systemd + aether-init hooks</span>
+        <div class="window-controls">
+          <button class="win-btn minimize" onclick="minimizeWindow('pkg')"></button>
+          <button class="win-btn maximize"></button>
+          <button class="win-btn close" onclick="closeWindow('pkg')"></button>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Package Manager</span>
-          <span class="spec-value">aether-pkg (pacman compatible)</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label">Window Manager</span>
-          <span class="spec-value">AetherWM (tiling + floating)</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label">Kernel</span>
-          <span class="spec-value">linux-aether (custom patches)</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label">Shell</span>
-          <span class="spec-value">zsh + aether-prompt</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label">Containers</span>
-          <span class="spec-value">Native rootless (aether-ct)</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label">Target Users</span>
-          <span class="spec-value">Advanced / Power users</span>
+      </div>
+      <div class="window-content">
+        <div class="pkg-ui">
+          <div class="pkg-sidebar">
+            <div class="pkg-sidebar-item active">Installed</div>
+            <div class="pkg-sidebar-item">AI Models</div>
+            <div class="pkg-sidebar-item">Updates</div>
+            <div class="pkg-sidebar-item">AUR</div>
+            <div class="pkg-sidebar-item">Containers</div>
+          </div>
+          <div class="pkg-main">
+            <input class="pkg-search" placeholder="Search packages or models..." />
+            <div class="pkg-list">
+              <div class="pkg-item">
+                <div>
+                  <div class="name">aether-core</div>
+                  <div class="desc">Core system + AI host runtime</div>
+                </div>
+                <button>Reinstall</button>
+              </div>
+              <div class="pkg-item">
+                <div>
+                  <div class="name">aether-ai</div>
+                  <div class="desc">Neural runtime & model manager</div>
+                </div>
+                <button>Reinstall</button>
+              </div>
+              <div class="pkg-item">
+                <div>
+                  <div class="name">linux-aether</div>
+                  <div class="desc">Kernel optimized for AI workloads</div>
+                </div>
+                <button>Reinstall</button>
+              </div>
+              <div class="pkg-item">
+                <div>
+                  <div class="name">cuda-aether</div>
+                  <div class="desc">GPU acceleration stack</div>
+                </div>
+                <button>Reinstall</button>
+              </div>
+              <div class="pkg-item">
+                <div>
+                  <div class="name">aether-7b-instruct</div>
+                  <div class="desc">Default local language model</div>
+                </div>
+                <button>Remove</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Get Started -->
-  <section id="get-started" class="section">
-    <div class="container">
-      <h2 class="section-title">Get Started</h2>
-      <p class="section-subtitle">AetherArch is currently a full design & architecture concept.</p>
-
-      <div class="cta-box">
-        <h3>This is a complete conceptual kit</h3>
-        <p>
-          You are looking at a rich visual and architectural concept of what a next-generation Arch-based distribution could look like.
-          No real bootable ISO exists yet — this is a design exploration.
-        </p>
-        <div class="cta-buttons">
-          <a href="docs.html" class="btn btn-primary">Read the Docs</a>
-          <a href="roadmap.html" class="btn btn-secondary">See the Roadmap</a>
+    <div class="window" id="sys-window">
+      <div class="titlebar" onmousedown="startDrag(event, 'sys-window')">
+        <div class="titlebar-left">
+          <img src="assets/logo-aetherarch.jpg" alt="" />
+          <span>About AetherArch</span>
         </div>
-        <p class="note">This entire kit is ready to be hosted on GitHub Pages.</p>
+        <div class="window-controls">
+          <button class="win-btn minimize" onclick="minimizeWindow('sys')"></button>
+          <button class="win-btn maximize"></button>
+          <button class="win-btn close" onclick="closeWindow('sys')"></button>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="sys-content">
+          <img src="assets/logo-aetherarch.jpg" alt="Logo" />
+          <h2>AetherArch</h2>
+          <div class="version">Beta 0.9.4 • AI Hosting OS</div>
+          <div class="sys-info">
+            <div>Role: <span>OS designed to host AIs</span></div>
+            <div>Kernel: <span>6.12.4-aether</span></div>
+            <div>WM: <span>AetherWM</span></div>
+            <div>AI Runtime: <span>aether-ai 0.9</span></div>
+            <div>Packages: <span>872</span></div>
+            <div>Uptime: <span id="uptime">0m</span></div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <img src="assets/logo-aetherarch.jpg" alt="" width="28" />
-          <span>AetherArch</span>
-        </div>
-        <p>Inspired by Arch Linux. Designed for those who want more.</p>
-        <div class="footer-links">
-          <a href="index.html">Home</a>
-          <a href="docs.html">Documentation</a>
-          <a href="roadmap.html">Roadmap</a>
-          <a href="about.html">About</a>
-        </div>
-        <p class="copyright">Concept project • Not an official Arch Linux derivative • 2026</p>
-      </div>
+    <div class="taskbar">
+      <button class="task-btn" onclick="openWindow('term')">
+        <img src="assets/logo-aetherarch.jpg" alt="" /> Terminal
+      </button>
+      <button class="task-btn" onclick="openWindow('ai')">
+        ◈ AI Core
+      </button>
+      <button class="task-btn" onclick="openWindow('pkg')">
+        📦 Packages
+      </button>
+      <button class="task-btn" onclick="openWindow('sys')">
+        ℹ System
+      </button>
     </div>
-  </footer>
 
-  <script src="script.js"></script>
+    <div class="toast" id="toast">
+      <h4>AetherArch Beta — AI Host</h4>
+      <p>OS conçu pour héberger une IA.<br>Ouvre <strong>AI Core</strong> ou tape <code>aether-ai</code> dans le terminal.</p>
+    </div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR', { hour12: false });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    let seconds = 0;
+    setInterval(() => {
+      seconds++;
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      const txt = m > 0 ? `${m}m ${s}s` : `${s}s`;
+      document.getElementById('uptime').textContent = txt;
+      document.getElementById('ai-uptime').textContent = txt;
+    }, 1000);
+
+    setTimeout(() => {
+      const t = document.getElementById('toast');
+      if (t) {
+        t.style.transition = 'opacity 0.4s';
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 400);
+      }
+    }, 7000);
+
+    function openWindow(name) {
+      const win = document.getElementById(name + '-window');
+      if (!win) return;
+      win.classList.add('open');
+      document.querySelectorAll('.window').forEach(w => w.classList.remove('active'));
+      win.classList.add('active');
+      if (name === 'term') setTimeout(() => document.getElementById('cmd')?.focus(), 50);
+    }
+
+    function closeWindow(name) {
+      const win = document.getElementById(name + '-window');
+      if (win) win.classList.remove('open', 'active');
+    }
+
+    function minimizeWindow(name) { closeWindow(name); }
+
+    let dragTarget = null, offsetX = 0, offsetY = 0;
+
+    function startDrag(e, id) {
+      dragTarget = document.getElementById(id);
+      const rect = dragTarget.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      document.querySelectorAll('.window').forEach(w => w.classList.remove('active'));
+      dragTarget.classList.add('active');
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', stopDrag);
+    }
+
+    function onDrag(e) {
+      if (!dragTarget) return;
+      dragTarget.style.left = (e.clientX - offsetX) + 'px';
+      dragTarget.style.top = (e.clientY - offsetY) + 'px';
+    }
+
+    function stopDrag() {
+      dragTarget = null;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup', stopDrag);
+    }
+
+    const term = document.getElementById('terminal');
+    const cmdInput = document.getElementById('cmd');
+
+    const commands = {
+      help: `Available commands:
+  help              Show this help
+  neofetch          System info
+  aether-ai         AI runtime control
+  aether-ai status  Neural host status
+  aether-ai models  List loaded models
+  ls                List files
+  clear             Clear terminal
+  whoami            Current user
+  uname             Kernel
+  date              Date
+  echo [text]       Print text
+  exit              Close terminal`,
+
+      neofetch: `           ▄▄▄▄▄▄▄
+        ▄████████████▄
+     ▄███▀  ▀████▀  ▀███▄
+    ███▀     ▀██▀     ▀███
+   ███    AETHERARCH     ███
+   ███   AI Hosting OS   ███
+    ███▄     ▄██▄     ▄███
+     ▀███▄  ▄████▄  ▄███▀
+        ▀████████████▀
+           ▀▀▀▀▀▀▀
+
+OS: AetherArch Beta 0.9.4 (AI Host)
+Kernel: 6.12.4-aether
+WM: AetherWM
+Shell: zsh 5.9
+AI Runtime: aether-ai 0.9
+Models: aether-7b-instruct
+Packages: 872
+Terminal: aether-term`,
+
+      ls: `drwxr-xr-x  ai/
+drwxr-xr-x  config/
+drwxr-xr-x  models/
+drwxr-xr-x  modules/
+-rw-r--r--  nexus.conf
+-rw-r--r--  version`,
+
+      clear: '__CLEAR__',
+      whoami: 'arch',
+      uname: 'Linux aetherarch 6.12.4-aether #1 SMP PREEMPT_DYNAMIC aether',
+      date: () => new Date().toString(),
+      exit: '__EXIT__',
+
+      'aether-ai': `aether-ai — Neural Host Runtime 0.9
+
+Usage:
+  aether-ai status     Show AI Core status
+  aether-ai models     List models
+  aether-ai load       Load a model (demo)
+  aether-ai stop       Stop runtime (demo)
+
+AI Core is currently online.`,
+
+      'aether-ai status': `[aether-ai] Neural Runtime Status
+  State:          Online
+  Backend:        CUDA
+  GPU Memory:     6.2 / 24 GB
+  Active models:  1 (aether-7b-instruct)
+  Inference:      ~42 tokens/s
+  Requests:       0 pending
+  Uptime:         active`,
+
+      'aether-ai models': `Loaded models:
+  • aether-7b-instruct   (default)   4.1 GB
+  • (slot free)
+  • (slot free)
+
+Use 'aether-ai load <name>' to load more (demo).`
+    };
+
+    function runCommand(input) {
+      const line = document.createElement('div');
+      line.innerHTML = `<span class="prompt">arch@aetherarch:~$ </span>${escapeHtml(input)}`;
+      term.insertBefore(line, cmdInput.parentElement);
+
+      const trimmed = input.trim();
+      let result = commands[trimmed] || commands[trimmed.split(/\s+/)[0]];
+
+      if (typeof result === 'function') result = result();
+
+      if (trimmed.startsWith('echo ')) {
+        result = trimmed.slice(5);
+      }
+
+      if (result === '__CLEAR__') {
+        term.querySelectorAll('div:not(:last-child)').forEach(el => el.remove());
+      } else if (result === '__EXIT__') {
+        closeWindow('term');
+      } else if (result !== undefined) {
+        const out = document.createElement('div');
+        out.className = trimmed.includes('aether-ai') ? 'ai-out' : 'output';
+        out.textContent = result;
+        term.insertBefore(out, cmdInput.parentElement);
+      } else if (trimmed) {
+        const out = document.createElement('div');
+        out.className = 'error';
+        out.textContent = `command not found: ${trimmed.split(/\s+/)[0]}`;
+        term.insertBefore(out, cmdInput.parentElement);
+      }
+
+      term.scrollTop = term.scrollHeight;
+      cmdInput.value = '';
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    cmdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') runCommand(cmdInput.value);
+    });
+
+    setTimeout(() => openWindow('term'), 600);
+    setTimeout(() => openWindow('ai'), 1400);
+  </script>
 </body>
 </html>
